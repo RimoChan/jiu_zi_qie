@@ -1,0 +1,107 @@
+﻿div{
+	margin:0;
+	padding:0;
+}
+body{
+	margin:0;
+	padding:0;
+	font-family:微软雅黑;
+	font-size:20;
+	overflow:hidden;
+}
+button{
+	font-family:微软雅黑;
+}
+.kiri{
+	border-radius:2px;
+	font-size:18;
+}
+.用户框{
+	position:absolute;
+	top:20;
+	right:20;
+}
+.头像框{
+	width:60;
+	height:60;
+	overflow:hidden;
+	border-radius:8px;
+    border:1px solid #fff;
+}
+.用户{
+	width:60;
+	color:rgba(255,255,255,0.6);
+	font-size:12;
+}
+.头像{
+	width:60;
+	height:60;
+}
+.选项{
+	width:300; 
+	height:170;
+	margin:10;
+	padding:0;
+	font-size:30; 
+	float:left;
+	border-radius:3px;
+	display:none;
+}
+.认识{
+	width:620; 
+	height:170;
+	margin:10;
+	padding:0;
+	font-size:30;
+	float:left;
+	border-radius:3px;
+}
+.下面{
+	/* background:rgba(255,255,255,0.15); */
+	position:absolute;
+	height:240;
+	bottom:0;
+	width:1366;
+	text-align:center;
+}
+.单词{
+	width:100%;
+	text-align:center;
+	position:absolute;
+	top:200;
+	font-size:100;
+	display:none;
+}
+.完成{
+	top:20;
+	left:20;
+	position:absolute;
+	background:rgba(255,255,255,0.1);
+	border-radius:10px;
+	display:none;
+}
+.用来保持大小{
+	width:180;
+	padding:10;
+}
+.背景用{
+	z-index:-1;
+	position:absolute;
+}
+small{
+	color:rgba(255,255,255,0.6)
+}
+button{
+	background:rgba(0,0,0,0);
+	color:#fff;
+    background:transparent; 
+    border:1px solid #fff;
+}   
+button:focus{
+    outline: none;
+}
+button:hover{
+    color: #ff8;
+    border:1px solid #ffc;
+}
+button {transition:color 0.5s;border:0.2s;}
