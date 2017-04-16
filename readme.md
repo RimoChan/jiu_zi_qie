@@ -1,6 +1,4 @@
-﻿<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>
-
-# 九字切！
+﻿# 九字切！
 
 就像是日文的「百詞斬」那樣的東西吧。
 
