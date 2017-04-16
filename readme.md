@@ -14,8 +14,8 @@
 ## 環境要求
 
 + windows | linux
- - 不過，linux得把main.py裏的final.html改成自己的絕對路徑23333(我也不知道爲什麼)
- - 其他系統我也不知道……
+	- 不過，linux得把main.py裏的final.html改成自己的絕對路徑23333(我也不知道爲什麼)
+	- 其他系統我也不知道……
  
 
 + python3
