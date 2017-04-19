@@ -2,6 +2,7 @@
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtWebChannel import QWebChannel
+from PyQt5.QtGui import QIcon
 import time, threading
 import os,sys;  sys.path.append('data')
 
@@ -44,6 +45,8 @@ class my_view(QWebEngineView):
         self.initUI()
         
     def initUI(self):
+        self.setWindowTitle('9Kiri!')
+        self.setWindowIcon(QIcon('icon.ico'))
         moban.tp('index.html','final.html',bg=data.gen_bg(),user=user.username,word_dict=config.word_dict)
         self.p=self.page()
         self.p.setWebChannel(channel)
