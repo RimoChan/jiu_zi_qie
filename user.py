@@ -1,35 +1,44 @@
-﻿import socket
+﻿import requests
 import sys
+import json
 sys.path.append('data')
 import config
+import data
 
-#长度不超过30，因为是utf8所以中文算3倍
-name=config.name
+#———————————————————————————————
+username=config.name
 password=config.password
 
-address=('localhost',4950)
+s = requests.Session()
 
-def check(name,password):
+auth={'username':username,'password':password}
+
+def check(username,password):
     try:
-        s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        s.connect(address)
-        s.send(name.encode('utf8').ljust(30,b'\0'))
-        s.send(password.encode('utf8').ljust(30,b'\0'))
-        r=s.recv(1)
-        if r==b'\0':
+        res=s.post(config.server+'/signin',data=auth,timeout=2)
+        if res.text=='good':
             return True
         else:
-            return False
-        s.close()
+            print('认证失败了')
     except:
-        return False
+        print('与服务器的连接出现问题')
 
-#服务器根本没开23333
-# if not check(name,password):
-    # name=None
-    
-if __name__=='__main__':
-    if check(name,password):
-        print('成')
+def kiri_sync():
+    res=s.post(config.server+'/kiri_sync',data={'username':username,'json':json.dumps(data.kiri,ensure_ascii=False)},timeout=2)
+    data.kiri=json.loads(res.text)
+
+
+if config.online_mode:
+    if check(username,password):
+        kiri_sync()
     else:
-        print('败')
+        print('并没有成功登录')
+        username=None
+else:
+    print('在线模式被关闭因此不会和服务器通信。')
+    
+
+
+
+if __name__=='__main__':
+    pass

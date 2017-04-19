@@ -44,7 +44,7 @@ class my_view(QWebEngineView):
         self.initUI()
         
     def initUI(self):
-        moban.tp('index.html','final.html',bg=data.gen_bg(),user=user.name,word_dict=config.word_dict)
+        moban.tp('index.html','final.html',bg=data.gen_bg(),user=user.username,word_dict=config.word_dict)
         self.p=self.page()
         self.p.setWebChannel(channel)
         self.load(QUrl('file:///html/final.html'))
@@ -78,3 +78,4 @@ if __name__=='__main__':
     app.exec_()
     
     data.kiri_save()
+    user.kiri_sync()
