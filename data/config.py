@@ -17,8 +17,7 @@ server='http://127.0.0.1:4950'
 #————————————————————————————
 #选择字典文件
 
-word_dict='旧版n3.txt'
-
+word_dict='n1单词.txt'
 dict_order={'spell':0, 'word':1, 'chinese':-1}
 
 #这一行指定字典的阅读顺序
@@ -35,18 +34,10 @@ dict_order={'spell':0, 'word':1, 'chinese':-1}
 
 
 #————————————————————————————
-#测试用的main，别管
-if __name__=='__main__':
-    f=open(word_dict,encoding='utf8')
-    f.read(1)
-    word=[]
-    n=0
-    while n<50:
-        n+=1
-        line=f.readline()
-        if line:
-            l=line.split()
-            print(dict( [(i,l[dict_order[i]]) for i in dict_order] ))
-        else:
-            break
-    f.close()
+#缓冲区大小
+buff_size=200
+
+#————————————————————————————
+#迷2333
+chocolate=9
+

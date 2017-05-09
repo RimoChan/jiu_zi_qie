@@ -81,13 +81,20 @@ button{
 	display:none;
 }
 .用来保持大小{
-	width:180;
+	width:220;
 	padding:10;
+}
+#上个例句 b {
+	color:#ff9;
 }
 .背景用{
 	z-index:-1;
 	position:absolute;
 }
+.例句中文{
+	color:rgba(155,155,255,0.75);
+}
+
 small{
 	color:rgba(255,255,255,0.6)
 }

@@ -6,7 +6,8 @@ from PyQt5.QtGui import QIcon
 import time, threading
 import os,sys;  sys.path.append('data')
 
-import moban, data, user, config
+from data import data 
+import moban, user, config
 
 #————————————————————————————
 #接受gui回传的信息
@@ -15,7 +16,7 @@ class CallHandler(QObject):
     def rec(self,x):
         view.page().runJavaScript(
             '''
-            data=['%s','%s','%s','%s','%s','%d','%s'];
+            data=['%s','%s','%s','%s','%s','%d','%s','%s'];
             set_data();
             all_kiri=%d;
             更新切数()
@@ -25,8 +26,8 @@ class CallHandler(QObject):
             # ('じょうか','恐惧','净化','三','四',2(正解位置),'浄化'(写法))
         )
     @pyqtSlot(str)
-    def kiri(self,s):
-        data.kiri[s]=1
+    def kiri(self):
+        data.to_kiri()
         view.page().runJavaScript(
             '''
             all_kiri=%d;
@@ -57,11 +58,20 @@ class my_view(QWebEngineView):
         t = threading.Thread(target=self.size_fix)
         t.setDaemon(True)
         t.start()
+        t2 = threading.Thread(target=self.time_save)
+        t2.setDaemon(True)
+        t2.start()
         
     def size_fix(self):
         while True:
             self.p.setZoomFactor(self.width()/1366)
             time.sleep(0.15)
+            
+    def time_save(self):
+        while True:
+            data.kiri_save()
+            time.sleep(30)
+            
 pass
 pass
 pass
@@ -81,4 +91,4 @@ if __name__=='__main__':
     app.exec_()
     
     data.kiri_save()
-    user.kiri_sync()
+    data.kiri_sync()

@@ -3,7 +3,6 @@ import sys
 import json
 sys.path.append('data')
 import config
-import data
 
 #———————————————————————————————
 username=config.name
@@ -23,9 +22,12 @@ def check(username,password):
     except:
         print('与服务器的连接出现问题')
 
-def kiri_sync():
-    res=s.post(config.server+'/kiri_sync',data={'username':username,'json':json.dumps(data.kiri,ensure_ascii=False)},timeout=2)
-    data.kiri=json.loads(res.text)
+def kiri_sync(kiri):
+    try:
+        res=s.post(config.server+'/kiri_sync',data={'username':username,'json':json.dumps(data.kiri,ensure_ascii=False)},timeout=2)
+        return json.loads(res.text)
+    except:
+        return kiri
 
 
 if config.online_mode:

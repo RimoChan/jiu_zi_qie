@@ -33,11 +33,12 @@
 		}
 		function 回收(pass=true){
 				$('.完成').hide(250);
-				danci=data[0];pinxie=data[6];jieshi=data[data[5]];
+				danci=data[0];pinxie=data[6];jieshi=data[data[5]];liju=data[7]; 
 				setTimeout(function(){
-										$('#上个单词').html(danci)
-										$('#上个拼写').html(pinxie)
-										$('#上个解释').html(jieshi)
+										$('#上个单词').html(danci);
+										$('#上个拼写').html(pinxie);
+										$('#上个解释').html(jieshi);
+										$('#上个例句').html(liju);
 										if(pass)
 											$('#kiri').show(0)
 										else 
