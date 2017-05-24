@@ -37,15 +37,26 @@ button{
 	width:60;
 	height:60;
 }
-.选项{
+.选项定位{
 	width:300; 
 	height:170;
+	float:left;
 	margin:10;
 	padding:0;
+}
+.选项{
+	width:100%; 
+	height:100%;
 	font-size:30; 
-	float:left;
+	margin:0;
+	padding:0;
 	border-radius:3px;
 	display:none;
+}
+.错误反馈{
+	position:absolute;
+	top:-20;
+	display:None;
 }
 .认识{
 	width:620; 
@@ -86,6 +97,12 @@ button{
 }
 #上个例句 b {
 	color:#ff9;
+}
+#上个单词{
+	font-size:15;
+}
+#上个拼写{
+	font-size:25;
 }
 .背景用{
 	z-index:-1;

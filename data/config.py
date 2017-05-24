@@ -10,7 +10,7 @@ password='daisuki'
 #通信的话就可以在不同的设备上同步你切过的词
 #但是说不定有什么我不知道的bug然后数据突然就消失，所以没有这个必要的话就不要填True
 
-online_mode=True
+online_mode=False
 
 server='http://127.0.0.1:4950'
 
@@ -35,9 +35,9 @@ dict_order={'spell':0, 'word':1, 'chinese':-1}
 
 #————————————————————————————
 #缓冲区大小
-buff_size=200
+buff_size=495
 
 #————————————————————————————
 #迷2333
-chocolate=9
+chocolate=9.1
 

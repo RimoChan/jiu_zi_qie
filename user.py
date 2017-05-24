@@ -38,6 +38,7 @@ if config.online_mode:
         username=None
 else:
     print('在线模式被关闭因此不会和服务器通信。')
+    username=None
     
 
 

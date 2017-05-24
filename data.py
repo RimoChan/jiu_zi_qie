@@ -52,7 +52,7 @@ class Data:
         self.buff=set()
         self.now_word=0
         self.buff_full()
-        print(self.buff)
+        #print(self.buff)
 
     #————————————————————————————
     #填满缓冲区
@@ -98,7 +98,9 @@ class Data:
     #————————————————————————————
     #生成一个题目
     def gen_ques(self):
-        gen=[]
+        gen=dict()
+        
+        
         try:
             self.pre_x=self.x
         except:
@@ -107,28 +109,21 @@ class Data:
             self.x=random.choice(list(self.buff)) #取buff中的一个下标，python好像没法从集合里选出随机元素？？
             if len(self.buff)==1:  break
             if self.x!=self.pre_x: break
-        the_word=self.word[self.x]
+        gen['senkai'] = self.word[self.x]
         
-        the_spell=the_word['spell']
-        
+        the_spell = gen['senkai']['spell']
         if the_spell in self.mon_dict and self.mon_dict[the_spell]:
-            print(self.mon_dict[the_spell])
             mon=self.deal_mon(random.choice(self.mon_dict[the_spell]))
-            print(mon)
+            #print(self.mon_dict[the_spell])
+            #print(mon)
         else:
             mon='没抓到2333'
+        gen['mon']=mon
         
-        seikai=rd(1,4)
-        gen.append(the_word['word'])
-        for i in range(1,5):
-            if i==seikai:
-                gen.append(the_word['chinese'])
-            else:
-                gen.append(self.word[rd(0,len(self.word)-1)]['chinese'])
-        gen.append(seikai)
-        gen.append(the_spell)
-        gen.append(mon)
-        return tuple(gen)
+        
+        for i in range(3):
+            gen[i] = self.word[rd(0,len(self.word)-1)]
+        return gen
 
     #————————————————————————————
     #生成背景用的单词
@@ -147,5 +142,7 @@ class Data:
 data=Data()
 
 if __name__=='__main__':
-    print(
-    data.deal_mon('学校を出てすぐこの会社に<b><b>就職</b></b>した/一出校门马上就到这家公司来<b>工作</b>了。'))
+    data = Data()
+    q=data.gen_ques()
+    for a in q:
+        print(a,' = ',q[a])

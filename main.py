@@ -3,9 +3,13 @@ from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtGui import QIcon
-import time, threading
-import os,sys;  sys.path.append('data')
+import time 
+import threading
+import os
+import sys
+import json
 
+sys.path.append('data')
 from data import data 
 import moban, user, config
 
@@ -13,18 +17,20 @@ import moban, user, config
 #接受gui回传的信息
 class CallHandler(QObject):
     @pyqtSlot(str)
-    def rec(self,x):
+    def rec(self):
         view.page().runJavaScript(
             '''
-            data=['%s','%s','%s','%s','%s','%d','%s','%s'];
+            data=%s;
             set_data();
+            '''     %
+            json.dumps(data.gen_ques()) +
+            '''
             all_kiri=%d;
             更新切数()
-            '''
-            %
-            (data.gen_ques()   +   (len(data.kiri),)  )
-            # ('じょうか','恐惧','净化','三','四',2(正解位置),'浄化'(写法))
+            '''     %
+            len(data.kiri)
         )
+        
     @pyqtSlot(str)
     def kiri(self):
         data.to_kiri()

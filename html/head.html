@@ -12,14 +12,37 @@
 		});
 	</script>
 	<script>
-		var data;
+		var data,pos;
 		function set_data(){
-			$('#单词').html(data[0]);
-			for(i=1;i<=4;i++)
-				$('#'+i).html(data[i]);
+			pos = Math.ceil(Math.random() * 4)
+			//alert(JSON.stringify(data))
+			for(i=1;i<=4;i++){
+				if(i<pos){
+					$('#'+i).html(data[String(i-1)]['chinese']);
+					$('#c'+i).html(data[String(i-1)]['spell'])
+				}
+				if(i==pos)
+					$('#'+i).html(data['senkai']['chinese']);
+				if(i>pos){
+					$('#'+i).html(data[String(i-2)]['chinese']);
+					$('#c'+i).html(data[String(i-2)]['spell'])
+				}
+			}
+			$('#单词').html(data['senkai']['word']);
 			$('#单词').fadeIn(600);
 			$('.认识').slideDown(500);
 		}
+		
+		function select(x){
+			if(x==pos){
+				回收();
+				清屏更新()
+			} else { 
+				$('#c'+x).fadeIn(300);
+				$('#c'+x).fadeOut(1500);
+			}
+		}
+		
 		function 更新切数(){
 			$('#切数').html(all_kiri);
 		}
@@ -33,12 +56,12 @@
 		}
 		function 回收(pass=true){
 				$('.完成').hide(250);
-				danci=data[0];pinxie=data[6];jieshi=data[data[5]];liju=data[7]; 
+				pre_data=data
 				setTimeout(function(){
-										$('#上个单词').html(danci);
-										$('#上个拼写').html(pinxie);
-										$('#上个解释').html(jieshi);
-										$('#上个例句').html(liju);
+										$('#上个单词').html(pre_data['senkai']['word']);
+										$('#上个拼写').html(pre_data['senkai']['spell']);
+										$('#上个解释').html(pre_data['senkai']['chinese']);
+										$('#上个例句').html(pre_data['mon']);
 										if(pass)
 											$('#kiri').show(0)
 										else 
@@ -55,15 +78,9 @@
 									}
 			, delay+150);
 		}
-		function select(x){
-			if(x==data[5]){
-				回收();
-				清屏更新()
-			}
-		}
 		
 		function kiri(){
-			kr(danci+' '+pinxie);
+			kr('fuck');
 			$('.完成').hide(250);
 		}
 		

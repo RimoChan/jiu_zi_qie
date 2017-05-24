@@ -10,16 +10,21 @@
 						<button class='认识' onclick='not_know()'>不认识</button>
 					</div>
 				{%for i in range(1,5)%}
-					<button class='选项' id='{{i}}' onclick='select("{{i}}")'>这是让人选的选项</button>
-					<!-- <a id='{{i}}' href='javascript:send("{{i}}")'><div class='选项'>这是让人选的选项</div></a> -->
+					<div class='选项定位'>
+						<button class='选项' id='{{i}}' onclick='select("{{i}}")'>
+						这是让人选的选项
+						</button>
+						<div class='错误反馈' id='c{{i}}'>错了就会跳出来</div>
+					</div>
 				{%endfor%}
 			</div>
 		</div>
 		<div class='完成'>
 			<div class='用来保持大小'>
-				<small>单词: </small><span id='上个单词'></span> <br/><br/>
-				<small>写法: </small><span id='上个拼写'></span> <br/><br/>
-				<small>解释: </small><span id='上个解释'></span> <br/><br/>
+				<span id='上个单词'></span> <br/>
+				<span id='上个拼写'></span> <br/><br/>
+				<small>解释: </small><br/>
+				<span id='上个解释'></span> <br/><br/>
 				<small>例句: </small><br/>
 				<span id='上个例句'></span> <br/><br/>
 				<div id='kiri'><button class='kiri' onclick='kiri()'>切り！</button> <br/><br/> </div>
