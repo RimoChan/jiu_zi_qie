@@ -1,4 +1,4 @@
-﻿<html>
+<html>
     <head>
         <link rel='stylesheet' href='style.css'/>
         <script src='jquery-3.1.1.min.js'></script>
@@ -10,21 +10,27 @@
     		<div class='单词' id='单词'>
     			单词在这里显示
     		</div>
-    		<div class='下面'>
-    			<div style='width:1280;margin:auto;padding:auto;'>
-    					<div style='position:absolute;'>
-    						<button class='认识' onclick='know()'>认识</button>
-    						<button class='认识' onclick='not_know()'>不认识</button>
-    					</div>
-    				{%for i in range(1,5)%}
-    					<div class='选项定位'>
-    						<button class='选项' id='{{i}}' onclick='select("{{i}}")'>
-    						这是让人选的选项
-    						</button>
-    						<div class='错误反馈' id='c{{i}}'>错了就会跳出来</div>
-    					</div>
-    				{%endfor%}
-    			</div>
+    		<div class='下面' id='認識'>
+    			<button class='大鍵' onclick='know()'>认识</button>
+    			<button class='大鍵' onclick='not_know()'>不认识</button>
+    		</div>
+            <div class='下面' id='選擇單詞'>
+                <div class='选项定位'>
+                    <button class='选项' id='1' onclick='select("1")'></button>
+                    <div class='错误反馈' id='c1'>错了就会跳出来</div>
+                </div>
+                <div class='选项定位'>
+                    <button class='选项' id='2' onclick='select("2")'></button>
+                    <div class='错误反馈' id='c2'>错了就会跳出来</div>
+                </div>
+                <div class='选项定位'>
+                    <button class='选项' id='3' onclick='select("3")'></button>
+                    <div class='错误反馈' id='c3'>错了就会跳出来</div>
+                </div>
+                <div class='选项定位'>
+                    <button class='选项' id='4' onclick='select("4")'></button>
+                    <div class='错误反馈' id='c4'>错了就会跳出来</div>
+                </div>
     		</div>
     		<div class='完成'>
     			<div class='用来保持大小'>
@@ -39,34 +45,30 @@
     			</div>
     		</div>
     		<div class='用户框'>
-    			{%if user%}
-    				<div class='头像框'>
+    				<!-- <div class='头像框'>
     					<img class='头像' src='../data/{{user}}.jpg'/>
     				</div>
     				<div class='用户'>
     					已登录为: {{user}}
-    				</div>
-    			{%else%}
+    				</div> -->
+
     				<div class='用户'>
     					并没有登录呢
     				</div>
-    			{%endif%}	
     				<br/>
     				<div class='用户'>
-    					现在使用的词典是: {{word_dict}}
+    					现在使用的词典是: <span id='單詞表名'></span>
     				</div>
     				<br/>
     				<div class='用户'>
-    					现在的切数是: <span id='切数'>?</span>
+    					现在的切数是: <span id='切数'></span>
     				</div>
     				<br/>
     				<button onclick='send("可视化")'>可视化</button>
     		</div>
     		
-    		{%for i in bg%}
-    			<div class='{{loop.index}} 背景用' style='top:{{i["top"]}}; left:{{i["left"]}}; opacity:{{i["op"]}}; font-size: {{i["size"]}}'>
-    				{{i['spell']}}
-    			</div>
-    		{%endfor%}
+            <div id='背景'>
+            </div>
+
     </body>
 </html>

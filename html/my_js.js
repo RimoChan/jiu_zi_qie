@@ -1,17 +1,32 @@
-﻿var a;
+var a;
 a=new QWebChannel(qt.webChannelTransport, function (channel) {
 	window.handler = channel.objects.handler;;
 	send=function(str){window.handler.rec(str);};
 });
 
+test_mode=0;
+單詞表名=0;
+背景=0;
+
 $(function(){
-	send('获得环境')
+    setTimeout(function(){send('初始化')}, 300);
 })
 
 function 准备(){
-	//if(test_mode)
-	//	alert('现在是测试模式。')
-	send('go')
+	for(var i in 背景){
+        var i=背景[i]
+        var t=$("<div>")
+        t.html(i['字'])
+        t.addClass('背景詞')
+        t.css('top',i['top'])
+        t.css('left',i['left'])
+        t.css('opacity',i['透明度'])
+        t.css('font_size',i['字號'])
+        $('#背景').append(t)
+        t.fadeIn(3000)
+    }    
+    $("#單詞表名").html(單詞表名)
+    send('go')
 }
 
 
@@ -35,7 +50,7 @@ function set_data(rec_data){
 	$('#单词').html(data['senkai']['word']);
 	
 	$('#单词').fadeIn(600);
-	$('.认识').slideDown(500);
+	$('#認識').slideDown(500);
 }
 
 function select(x){
@@ -43,6 +58,8 @@ function select(x){
 		回收()
 		清屏更新()
 	} else {
+        $('#c'+x).stop()
+        $('#c'+x).stop()
 		$('#c'+x).fadeIn(300)
 		$('#c'+x).fadeOut(1500)
 	}
@@ -52,8 +69,8 @@ function 更新切数(all_kiri){
 	$('#切数').html(all_kiri);
 }
 function know(){
-	$('.认识').fadeOut(300);
-	$('.选项').fadeIn(300);
+	$('#認識').fadeOut(300);
+	$('#選擇單詞').fadeIn(300);
 }
 function not_know(){
 	回收(false);
@@ -81,7 +98,7 @@ function 回收(pass=true){
 		, 250);
 }
 function 清屏更新(delay=0){
-	$('.选项').slideUp(150);
+	$('#選擇單詞').slideUp(150);
 	$('#单词').fadeOut(150);
 	setTimeout(function(){send('go')}, delay+150);
 }

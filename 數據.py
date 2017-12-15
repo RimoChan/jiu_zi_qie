@@ -15,7 +15,7 @@ def weighting_choice(li,wei):
         if p<0: 
             return li[i]
         
-class Data:
+class Data():
     def __init__(self):
         #————————————————————————————
         #读入单词表
@@ -152,7 +152,7 @@ class Data:
         for i in range(1,100):
             s.add(rd(0,len(self.word)-1))
         for i in s:
-            gen_bg.append({'spell':self.word[i]['spell'],'top':rd(-100,800),'left':rd(-200,1300),'op':rd(5,20)/100,'size':rd(13,30)})
+            gen_bg.append({'字':self.word[i]['spell'],'top':rd(-100,800),'left':rd(-100,1400),'透明度':rd(5,20)/100,'字號':rd(13,30)})
         return gen_bg
     
     def kiried(self,x):

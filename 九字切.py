@@ -10,7 +10,7 @@ import sys
 import json
 
 from 數據 import data
-import moban, user, 圖表
+import user, 圖表
 
 from 配置 import 配置
 
@@ -22,11 +22,16 @@ class CallHandler(QObject):
         if 命令=='go':
             run_js('set_data(%s);' % json.dumps(data.gen_ques()))
             run_js('更新切数(%d)' % len(data.kiri))
-        if 命令=='获得环境':
+        if 命令=='初始化':
             run_js('''
                 test_mode=%d;
+                單詞表名="%s";
+                背景=%s;
                 准备();
-                ''' % 配置['測試模式']
+                ''' 
+                % 
+                (配置['測試模式'],配置['單詞表'],json.dumps(data.gen_bg()))
+                
                 )
         if 命令=='可视化':
             圖表.draw([data.word[i]['权'] for i in list(data.buff)])
@@ -47,10 +52,9 @@ class 九字切窗體(QWebEngineView):
     def initUI(self):
         self.setWindowTitle('九字切')
         self.setWindowIcon(QIcon('資源/九字切.ico'))
-        moban.tp('index.html','final.html',bg=data.gen_bg(),user=user.username,word_dict=配置['單詞表'])
         self.p=self.page()
         self.p.setWebChannel(channel)
-        self.load(QUrl('file:///html/final.html'))
+        self.load(QUrl('file:///html/index.html'))
         self.resize(1366,768)
         self.show()
         # self.showFullScreen()
