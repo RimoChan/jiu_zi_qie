@@ -85,8 +85,8 @@ function 回收(pass=true){
 		setTimeout(function(){
 								$('#上个单词').html(pre_data['正解']['假名']);
 								$('#上个拼写').html(pre_data['正解']['寫法']);
-								if(pre_data['正解']['词性'])
-									$('#上个词性').html('【'+pre_data['正解']['词性']+'】');
+								if(pre_data['正解']['詞性'])
+									$('#上个词性').html('【'+pre_data['正解']['詞性']+'】');
 								$('#上个解释').html(pre_data['正解']['中文']);
 								$('#上个例句').html(pre_data['例句']);
 								if(pass)
