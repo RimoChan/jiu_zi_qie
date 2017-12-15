@@ -8,6 +8,7 @@ body{
 	font-family:微软雅黑;
 	font-size:20;
 	overflow:hidden;
+	-webkit-user-select:none;
 }
 button{
 	font-family:微软雅黑;
@@ -103,6 +104,9 @@ button{
 }
 #上个拼写{
 	font-size:25;
+}
+#上个词性{
+	float:right;
 }
 .背景用{
 	z-index:-1;

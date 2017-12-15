@@ -20,7 +20,7 @@
 
 + python3
 
-+ pip install jinja2, PyQt5
++ pip install jinja2, PyQt5, requests, matplotlib
 
 + 大概就沒有了？
 

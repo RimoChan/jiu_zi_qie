@@ -1,35 +1,38 @@
-﻿import random
+import random
 rd= random.randint
 
 import sys
 import json
 import re
-sys.path.append('data')
-import config
-import user
+from 配置 import 配置
 
-def chocolate():
-    x=config.chocolate
-    while True:
-        x=x*4.3451%3.5836
-        yield x
-
+#加权抽取
+def weighting_choice(li,wei):
+    total_weight=sum(wei)
+    p=random.uniform(0,total_weight)
+    for i in range(len(li)):
+        p-=wei[i]
+        if p<0: 
+            return li[i]
+        
 class Data:
-
     def __init__(self):
         #————————————————————————————
         #读入单词表
-        f=open('data/'+config.word_dict,encoding='utf8')
+        f=open('data/'+配置['單詞表'],encoding='utf8')
         f.read(1)
         self.word=[] #单词表
         while 1:
             line=f.readline()
             if line:
                 l=line.split()
-                self.word.append(dict( [(i,l[config.dict_order[i]]) for i in config.dict_order] ))
+                self.word.append(dict( [(i,l[配置['dict_order'][i]]) for i in 配置['dict_order']] ))
             else:
                 break
         f.close()
+        
+        # self.word=self.word[:配置['缓冲区大小']]
+        
         #————————————————————————————
         #读入例句字典
         f=open('data/dictionary.json',encoding='utf8')
@@ -38,26 +41,34 @@ class Data:
         
         #————————————————————————————
         #打乱单词表
-        a=chocolate()
+        R=random.Random(配置['隨機種子'])
         for i in self.word:
-            i['eigen']=next(a)
+            i['eigen']=R.random()
         self.word.sort( key=lambda x : x['eigen'] )
         #————————————————————————————
         #读入被切过的单词
-        f=open('data/kiri.json',encoding='utf8')
-        self.kiri=json.loads(f.read())
-        f.close()
+        try:
+            f=open('data/kiri.json',encoding='utf8')
+            self.kiri=json.loads(f.read())
+            f.close()
+        except:
+            self.kiri={}
         #————————————————————————————
         #生成缓冲区
         self.buff=set()
         self.now_word=0
         self.buff_full()
-        #print(self.buff)
+        
+        #————————————————————————————
+        #填充权
+        for item in self.word:
+            item['权']=1
+            
 
     #————————————————————————————
     #填满缓冲区
     def buff_full(self):
-        while len(self.buff)<config.buff_size and self.now_word<len(self.word):
+        while len(self.buff)<配置['缓冲区大小'] and self.now_word<len(self.word):
             if not self.kiried(self.now_word):
                 self.buff.add(self.now_word)
             self.now_word+=1
@@ -80,13 +91,18 @@ class Data:
     #————————————————————————————
     #与服务器同步被切过的单词
     def kiri_sync(self):
+        import user
         self.kiri=user.kiri_sync(self.kiri)
     
     #处理例句
     def deal_mon(self,mon):
         if type(mon)==str:
             pattern=re.compile(r'^.*?[^<]/')
-            a=pattern.findall(mon)[0]
+            a=pattern.findall(mon)
+            if a:
+                a=a[0]
+            else:
+                return
             b=mon[len(a):-1]
             mon=['','']
             mon[0]=a[0:-1]
@@ -106,16 +122,19 @@ class Data:
         except:
             self.pre_x=-1
         while True:
-            self.x=random.choice(list(self.buff)) #取buff中的一个下标，python好像没法从集合里选出随机元素？？
+            li=list(self.buff)
+            # self.x=random.choice(li)
+            self.x=weighting_choice(li,[self.word[i]['权'] for i in li])    #取buff中的一个下标
             if len(self.buff)==1:  break
             if self.x!=self.pre_x: break
+        self.word[self.x]['权']*=配置['確率調整']
+        self.word[self.x]['权']=min(max(self.word[self.x]['权'],配置['確率範圍'][0]),配置['確率範圍'][1])
+        
         gen['senkai'] = self.word[self.x]
         
         the_spell = gen['senkai']['spell']
         if the_spell in self.mon_dict and self.mon_dict[the_spell]:
             mon=self.deal_mon(random.choice(self.mon_dict[the_spell]))
-            #print(self.mon_dict[the_spell])
-            #print(mon)
         else:
             mon='没抓到2333'
         gen['mon']=mon
@@ -143,6 +162,17 @@ data=Data()
 
 if __name__=='__main__':
     data = Data()
-    q=data.gen_ques()
-    for a in q:
-        print(a,' = ',q[a])
+    print(data.word[1])
+    for i in range(160):
+        q=data.gen_ques()
+        if i%100==99:
+            print('已经处理%d个。'%i)
+        
+        
+    import numpy as np
+    权s=[data.word[i]['权'] for i in list(data.buff)]
+    print('方差=%.3f' % np.array(权s).var())
+    print('没读过数=%d'% sum([i==1 for i in 权s]))
+    
+    import 圖表
+    圖表.draw(权s)

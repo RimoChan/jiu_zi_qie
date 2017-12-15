@@ -1,4 +1,4 @@
-﻿from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtWebChannel import QWebChannel
@@ -9,71 +9,64 @@ import os
 import sys
 import json
 
-sys.path.append('data')
-from data import data 
-import moban, user, config
+from 數據 import data
+import moban, user, 圖表
+
+from 配置 import 配置
 
 #————————————————————————————
 #接受gui回传的信息
 class CallHandler(QObject):
     @pyqtSlot(str)
-    def rec(self):
-        view.page().runJavaScript(
-            '''
-            data=%s;
-            set_data();
-            '''     %
-            json.dumps(data.gen_ques()) +
-            '''
-            all_kiri=%d;
-            更新切数()
-            '''     %
-            len(data.kiri)
-        )
+    def rec(self,命令):
+        if 命令=='go':
+            run_js('set_data(%s);' % json.dumps(data.gen_ques()))
+            run_js('更新切数(%d)' % len(data.kiri))
+        if 命令=='获得环境':
+            run_js('''
+                test_mode=%d;
+                准备();
+                ''' % 配置['測試模式']
+                )
+        if 命令=='可视化':
+            圖表.draw([data.word[i]['权'] for i in list(data.buff)])
+        if 命令=='切':
+            data.to_kiri()
+            run_js('更新切数(%d)' % len(data.kiri))
+
+def run_js(x):
+    view.page().runJavaScript(x)
         
-    @pyqtSlot(str)
-    def kiri(self):
-        data.to_kiri()
-        view.page().runJavaScript(
-            '''
-            all_kiri=%d;
-            更新切数()
-            '''
-            %
-            len(data.kiri)
-        )
-        
-#————————————————————————————
-#窗口界面
-class my_view(QWebEngineView):
+
+class 九字切窗體(QWebEngineView):
 
     def __init__(self):
         super().__init__()
         self.initUI()
         
     def initUI(self):
-        self.setWindowTitle('9Kiri!')
-        self.setWindowIcon(QIcon('icon.ico'))
-        moban.tp('index.html','final.html',bg=data.gen_bg(),user=user.username,word_dict=config.word_dict)
+        self.setWindowTitle('九字切')
+        self.setWindowIcon(QIcon('資源/九字切.ico'))
+        moban.tp('index.html','final.html',bg=data.gen_bg(),user=user.username,word_dict=配置['單詞表'])
         self.p=self.page()
         self.p.setWebChannel(channel)
         self.load(QUrl('file:///html/final.html'))
         self.resize(1366,768)
         self.show()
         # self.showFullScreen()
-        t = threading.Thread(target=self.size_fix)
+        t = threading.Thread(target=self.修正縮放)
         t.setDaemon(True)
         t.start()
-        t2 = threading.Thread(target=self.time_save)
+        t2 = threading.Thread(target=self.定時存檔)
         t2.setDaemon(True)
         t2.start()
         
-    def size_fix(self):
+    def 修正縮放(self):
         while True:
             self.p.setZoomFactor(self.width()/1366)
             time.sleep(0.15)
             
-    def time_save(self):
+    def 定時存檔(self):
         while True:
             data.kiri_save()
             time.sleep(30)
@@ -92,7 +85,7 @@ if __name__=='__main__':
     handler = CallHandler()
     channel.registerObject('handler', handler)
     
-    view = my_view()
+    view = 九字切窗體()
     
     app.exec_()
     
