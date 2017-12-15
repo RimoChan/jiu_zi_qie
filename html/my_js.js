@@ -37,17 +37,17 @@ function set_data(rec_data){
 	//alert(JSON.stringify(data))
 	for(i=1;i<=4;i++){
 		if(i<pos){
-			$('#'+i).html(data[String(i-1)]['chinese']);
-			$('#c'+i).html(data[String(i-1)]['spell'])
+			$('#'+i).html(data[String(i-1)]['中文']);
+			$('#c'+i).html(data[String(i-1)]['寫法'])
 		}
 		if(i==pos)
-			$('#'+i).html(data['senkai']['chinese']);
+			$('#'+i).html(data['正解']['中文']);
 		if(i>pos){
-			$('#'+i).html(data[String(i-2)]['chinese']);
-			$('#c'+i).html(data[String(i-2)]['spell'])
+			$('#'+i).html(data[String(i-2)]['中文']);
+			$('#c'+i).html(data[String(i-2)]['寫法'])
 		}
 	}
-	$('#单词').html(data['senkai']['word']);
+	$('#单词').html(data['正解']['假名']);
 	
 	$('#单词').fadeIn(600);
 	$('#認識').slideDown(500);
@@ -83,12 +83,12 @@ function 回收(pass=true){
 		$('.完成').hide(250);
 		pre_data=data
 		setTimeout(function(){
-								$('#上个单词').html(pre_data['senkai']['word']);
-								$('#上个拼写').html(pre_data['senkai']['spell']);
-								if(pre_data['senkai']['词性'])
-									$('#上个词性').html('【'+pre_data['senkai']['词性']+'】');
-								$('#上个解释').html(pre_data['senkai']['chinese']);
-								$('#上个例句').html(pre_data['mon']);
+								$('#上个单词').html(pre_data['正解']['假名']);
+								$('#上个拼写').html(pre_data['正解']['寫法']);
+								if(pre_data['正解']['词性'])
+									$('#上个词性').html('【'+pre_data['正解']['词性']+'】');
+								$('#上个解释').html(pre_data['正解']['中文']);
+								$('#上个例句').html(pre_data['例句']);
 								if(pass)
 									$('#kiri').show(0)
 								else 

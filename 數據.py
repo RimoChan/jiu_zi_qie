@@ -6,8 +6,7 @@ import json
 import re
 from 配置 import 配置
 
-#加权抽取
-def weighting_choice(li,wei):
+def 加权抽取(li,wei):
     total_weight=sum(wei)
     p=random.uniform(0,total_weight)
     for i in range(len(li)):
@@ -19,144 +18,124 @@ class Data():
     def __init__(self):
         #————————————————————————————
         #读入单词表
-        f=open('data/'+配置['單詞表'],encoding='utf8')
-        f.read(1)
-        self.word=[] #单词表
-        while 1:
-            line=f.readline()
-            if line:
-                l=line.split()
-                self.word.append(dict( [(i,l[配置['dict_order'][i]]) for i in 配置['dict_order']] ))
-            else:
-                break
-        f.close()
+        self.單詞表=[]
+        with open('data/'+配置['單詞表'],encoding='utf8') as f:
+            while 1:
+                line=f.readline()
+                if line:
+                    l=line.split()
+                    self.單詞表.append(dict( [(i,l[配置['dict_order'][i]]) for i in 配置['dict_order']] ))
+                else:
+                    break
         
-        # self.word=self.word[:配置['缓冲区大小']]
         
         #————————————————————————————
         #读入例句字典
-        f=open('data/dictionary.json',encoding='utf8')
-        self.mon_dict=json.loads(f.read())
-        f.close()
+        with open('data/例句.json',encoding='utf8') as f:
+            self.例句字典=json.loads(f.read())
         
         #————————————————————————————
         #打乱单词表
         R=random.Random(配置['隨機種子'])
-        for i in self.word:
-            i['eigen']=R.random()
-        self.word.sort( key=lambda x : x['eigen'] )
+        for i in self.單詞表:
+            i['特徵']=R.random()
+        self.單詞表.sort( key=lambda x : x['特徵'] )
         #————————————————————————————
         #读入被切过的单词
         try:
-            f=open('data/kiri.json',encoding='utf8')
-            self.kiri=json.loads(f.read())
-            f.close()
+            with open('data/kiri.json',encoding='utf8') as f:
+                self.切過的詞=json.loads(f.read())
         except:
-            self.kiri={}
+            print('存檔沒了……')
+            self.切過的詞={}
         #————————————————————————————
         #生成缓冲区
-        self.buff=set()
-        self.now_word=0
-        self.buff_full()
+        self.緩衝區=set()
+        self.緩衝區尾=0
+        self.填滿緩衝區()
         
         #————————————————————————————
         #填充权
-        for item in self.word:
-            item['权']=1
+        for i in self.單詞表:
+            i['权']=1
             
 
-    #————————————————————————————
-    #填满缓冲区
-    def buff_full(self):
-        while len(self.buff)<配置['缓冲区大小'] and self.now_word<len(self.word):
-            if not self.kiried(self.now_word):
-                self.buff.add(self.now_word)
-            self.now_word+=1
+    def 填滿緩衝區(self):
+        while len(self.緩衝區)<配置['缓冲区大小'] and self.緩衝區尾<len(self.單詞表):
+            if not self.切過了(self.緩衝區尾):
+                self.緩衝區.add(self.緩衝區尾)
+            self.緩衝區尾+=1
 
-    #————————————————————————————
     #切掉上一个单词
-    def to_kiri(self):
-        the_word = self.word[self.pre_x]
-        self.kiri[the_word['word']+' '+the_word['spell']]=1
-        self.buff.remove(self.pre_x)
-        self.buff_full()
+    def 前切(self):
+        前詞 = self.單詞表[self.之前詞位置]
+        self.切過的詞[前詞['假名']+' '+前詞['寫法']]=1
+        self.緩衝區.remove(self.之前詞位置)
+        self.填滿緩衝區()
 
-    #————————————————————————————
-    #存档被切过的单词
-    def kiri_save(self):
-        f=open('data/kiri.json','w',encoding='utf8')
-        f.write(json.dumps(self.kiri,ensure_ascii=False))
-        f.close()
-
-    #————————————————————————————
-    #与服务器同步被切过的单词
-    def kiri_sync(self):
+    def 切詞存檔(self):
+        with open('data/kiri.json','w',encoding='utf8') as f:
+            f.write(json.dumps(self.切過的詞,ensure_ascii=False))
+       
+    def 切詞同步(self):
         import user
-        self.kiri=user.kiri_sync(self.kiri)
+        self.切過的詞=user.切詞同步(self.切過的詞)
     
-    #处理例句
-    def deal_mon(self,mon):
-        if type(mon)==str:
+    def 处理例句(self,句):
+        if type(句)==str:
             pattern=re.compile(r'^.*?[^<]/')
-            a=pattern.findall(mon)
+            a=pattern.findall(句)
             if a:
                 a=a[0]
             else:
                 return
-            b=mon[len(a):-1]
-            mon=['','']
-            mon[0]=a[0:-1]
-            mon[1]=b
+            b=句[len(a):-1]
+            句=['','']
+            句[0]=a[0:-1]
+            句[1]=b
             
-        if type(mon)==list:
-            return mon[0] + '<br/><span class="例句中文">'+mon[1]+'</span>'
+        if type(句)==list:
+            return 句[0] + '<br/><span class="例句中文">'+句[1]+'</span>'
 
-    #————————————————————————————
-    #生成一个题目
-    def gen_ques(self):
-        gen=dict()
-        
+    def 生成問題(self):
+        組={}
         
         try:
-            self.pre_x=self.x
+            self.之前詞位置=self.當前詞位置
         except:
-            self.pre_x=-1
+            self.之前詞位置=-1
         while True:
-            li=list(self.buff)
-            # self.x=random.choice(li)
-            self.x=weighting_choice(li,[self.word[i]['权'] for i in li])    #取buff中的一个下标
-            if len(self.buff)==1:  break
-            if self.x!=self.pre_x: break
-        self.word[self.x]['权']*=配置['確率調整']
-        self.word[self.x]['权']=min(max(self.word[self.x]['权'],配置['確率範圍'][0]),配置['確率範圍'][1])
+            li=list(self.緩衝區)
+            self.當前詞位置=加权抽取(li,[self.單詞表[i]['权'] for i in li])    #取buff中的一个下标
+            if len(self.緩衝區)==1:  break
+            if self.當前詞位置!=self.之前詞位置: break
+        self.單詞表[self.當前詞位置]['权']*=配置['確率調整']
+        self.單詞表[self.當前詞位置]['权']=min(max(self.單詞表[self.當前詞位置]['权'],配置['確率範圍'][0]),配置['確率範圍'][1])
         
-        gen['senkai'] = self.word[self.x]
+        組['正解'] = self.單詞表[self.當前詞位置]
         
-        the_spell = gen['senkai']['spell']
-        if the_spell in self.mon_dict and self.mon_dict[the_spell]:
-            mon=self.deal_mon(random.choice(self.mon_dict[the_spell]))
+        the_spell = 組['正解']['寫法']
+        if the_spell in self.例句字典 and self.例句字典[the_spell]:
+            例句=self.处理例句(random.choice(self.例句字典[the_spell]))
         else:
-            mon='没抓到2333'
-        gen['mon']=mon
-        
+            例句='没抓到2333'
+        組['例句']=例句
         
         for i in range(3):
-            gen[i] = self.word[rd(0,len(self.word)-1)]
-        return gen
+            組[i] = self.單詞表[rd(0,len(self.單詞表)-1)]
+        return 組
 
-    #————————————————————————————
-    #生成背景用的单词
-    def gen_bg(self):
-        gen_bg=[]
+    def 生成背景詞(self):
+        詞列=[]
         s=set()
         for i in range(1,100):
-            s.add(rd(0,len(self.word)-1))
+            s.add(rd(0,len(self.單詞表)-1))
         for i in s:
-            gen_bg.append({'字':self.word[i]['spell'],'top':rd(-100,800),'left':rd(-100,1400),'透明度':rd(5,20)/100,'字號':rd(13,30)})
-        return gen_bg
+            詞列.append({'字':self.單詞表[i]['寫法'],'top':rd(-100,800),'left':rd(-100,1400),'透明度':rd(5,20)/100,'字號':rd(13,30)})
+        return 詞列
     
-    def kiried(self,x):
-        return self.word[x]['word']+' '+self.word[x]['spell'] in self.kiri
+    def 切過了(self,x):
+        return self.單詞表[x]['假名']+' '+self.單詞表[x]['寫法'] in self.切過的詞
 
 data=Data()
 
@@ -170,7 +149,7 @@ if __name__=='__main__':
         
         
     import numpy as np
-    权s=[data.word[i]['权'] for i in list(data.buff)]
+    权s=[data.word[i]['权'] for i in list(data.緩衝區)]
     print('方差=%.3f' % np.array(权s).var())
     print('没读过数=%d'% sum([i==1 for i in 权s]))
     

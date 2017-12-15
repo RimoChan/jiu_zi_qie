@@ -1,4 +1,4 @@
-﻿import requests
+import requests
 import sys
 import json
 
@@ -22,7 +22,7 @@ def check(username,password):
     except:
         print('与服务器的连接出现问题')
 
-def kiri_sync(kiri):
+def 切詞同步(kiri):
     try:
         res=s.post(配置['服務器地址']+'/kiri_sync',data={'username':username,'json':json.dumps(data.kiri,ensure_ascii=False)},timeout=2)
         return json.loads(res.text)
@@ -32,7 +32,7 @@ def kiri_sync(kiri):
 
 if 配置['在線的']:
     if check(username,password):
-        data.kiri_sync()
+        data.切詞同步()
     else:
         print('并没有成功登录')
         username=None
