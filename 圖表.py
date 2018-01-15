@@ -9,5 +9,5 @@ def draw(height):
     
     left=range(len(height))
     
-    plt.bar(left = left,height = height,color='#000',width = 1,yerr=0.000001)
+    plt.bar(left = left,height = height,color='000',width = 1,yerr=0.000001)
     plt.show()
