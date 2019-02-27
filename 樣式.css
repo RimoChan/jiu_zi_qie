@@ -1,0 +1,65 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 2vw;
+    font-family: zzz; 
+    text-shadow: 1px 1px 5px #FFF,-1px -1px 5px #FFF;
+    overflow:hidden;
+    text-align:center;
+    -webkit-user-select:none;
+}
+.正中{
+    font-size:350%;
+    position:absolute;
+    top:40%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.底{
+    height:25%;
+    width:100%;
+    position:absolute;
+    bottom:0%;
+}
+.選項按鈕{
+    height:100%;
+    border:solid 1px #777;
+    box-sizing: border-box;
+    transform-origin: 50% 0%;
+    transform: scale(0.8);
+    box-shadow: 0px 0px 10px;
+}
+.選項{
+    position:absolute;
+    width:100%;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    font-size:180%;
+}
+#bg{
+    background: url('紙背景.jpg');
+    background-size: cover;
+    position:fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: -1;
+}
+.水晶{
+    border-radius: 2vw;
+    background:url('紙背景模糊.jpg');
+    background-size:cover;
+    background-position: center;
+    border:1px solid rgba(0,0,0,0.2);
+    display:block;
+    transition: filter 0.4s, transform 0.4s;
+}
+.水晶:hover{
+    filter:hue-rotate(80deg);
+    transform: scale(0.85);
+    transition: filter 0.2s, transform 0.2s;
+}

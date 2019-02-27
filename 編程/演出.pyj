@@ -1,0 +1,61 @@
+import random
+import 數據
+
+print('你好！')
+
+j = new Proxy({},{'get': def f(target,name):
+  return $('#'+name)
+})
+
+class 演出():
+    def __init__(self):
+        self.正解位置 = None
+
+    def 回收(self):
+        j.單詞.fadeOut(500)
+        j.意思.fadeOut(500)
+        setTimeout(def ():
+            self.出題()
+        ,500)
+        
+    def 出題(self):
+        j.自覺.fadeIn(300)
+        j.單詞.fadeIn(500)
+        
+        a = 數據.data.生成問題()
+        
+        self.正解位置 = random.randint(0,3)
+        
+        for i in range(0,self.正解位置):
+            $('#'+i+' .選項').html(a[i].中文)
+        for i in range(self.正解位置+1,4):
+            $('#'+i+' .選項').html(a[i-1].中文)
+        $('#'+self.正解位置+' .選項').html(a.正解.中文)
+        
+        j.單詞.html(a.正解.假名)
+        
+        print(a)
+        print(self)
+    
+    def 選擇(self,x):
+        if x == self.正解位置:
+            self.回收()
+    
+    def 初始化(self,x):
+        j.意思.hide(0)
+        self.出題()
+        $('#意思 .選項按鈕').click(def (x):
+            self.選擇(int(x.currentTarget.id))
+        )
+        $('#認識').click(def (x):
+            j.自覺.fadeOut(100)
+            setTimeout(def f():
+                j.意思.fadeIn(200)
+            ,100)
+            self.選擇(int(x.currentTarget.id))
+        )
+        
+a=演出()
+def _():
+    a.初始化()
+$(_)
