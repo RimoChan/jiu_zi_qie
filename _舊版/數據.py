@@ -1,7 +1,6 @@
 import random
-rd= random.randint
+rd = random.randint
 
-import sys
 import json
 import re
 from 配置 import 配置
@@ -141,17 +140,24 @@ data=Data()
 
 if __name__=='__main__':
     data = Data()
-    print(data.word[1])
-    for i in range(160):
-        q=data.gen_ques()
-        if i%100==99:
-            print('已经处理%d个。'%i)
-        
-        
-    import numpy as np
-    权s=[data.word[i]['权'] for i in list(data.緩衝區)]
-    print('方差=%.3f' % np.array(权s).var())
-    print('没读过数=%d'% sum([i==1 for i in 权s]))
+    t = data.單詞表
+    for i in t:
+        del i['特徵']
+        del i['权']
+    with open('n1.js','w',encoding='utf8') as f:
+        f.write(json.dumps(t, ensure_ascii=False))
     
-    import 圖表
-    圖表.draw(权s)
+    # data = Data()
+    # print(data.單詞表[1])
+    # for i in range(160):
+    #     q=data.生成問題()
+    #     if i%100==99:
+    #         print('已经处理%d个。'%i)
+    # 
+    # import numpy as np
+    # 权s=[data.單詞表[i]['权'] for i in list(data.緩衝區)]
+    # print('方差=%.3f' % np.array(权s).var())
+    # print('没读过数=%d'% sum([i==1 for i in 权s]))
+    # 
+    # import 圖表
+    # 圖表.draw(权s)
