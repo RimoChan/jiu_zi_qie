@@ -46,6 +46,7 @@ class 演出():
             $('#'+i+' .選項').html(self.問題[i-1].中文)
         $('#'+self.正解位置+' .選項').html(self.問題.正解.中文)
         
+        j.加載.hide(0)
         j.單詞.html(self.問題.正解.假名)
         
         print(self)
@@ -54,39 +55,56 @@ class 演出():
         if x == self.正解位置:
             self.回收()
             
-    def 加載(self):
-        self.data = 數據.Data()
+    def 加載(self,單詞表):
+        self.data = 數據.Data(單詞表)
         self.出題()
+        j.切數.html(len(self.data.切過的詞))
         print('加載好了')
-        
+    
+    def 更換詞典(self,詞典名):
+        $.getScript('./編程/數據/'+詞典名+'單詞.js', def f():
+            self.t+=1
+            if self.t>1:
+                self.加載(eval(詞典名+'單詞'))
+        )
+    
     def 初始化(self,x):
         print('初始化')
+        a = $.cookie('單詞表')
+        if not a:
+            a = 'n3'
         $.getScript("./編程/數據/例句.js", def f():
             self.t+=1
-            if self.t==2:
-                self.加載()
+            if self.t>1:
+                self.加載(n3單詞)
         )
-        $.getScript("./編程/數據/n1單詞.js", def f():
-            self.t+=1
-            if self.t==2:
-                self.加載()
-        )
+        self.更換詞典('n3')
         
+        j.單詞.hide(0)
         j.上板.hide(0)
         j.意思.hide(0)
         $('#意思 .選項按鈕').click(def (x):
             self.選擇(int(x.currentTarget.id))
         )
-        $('#認識').click(def (x):
+        j.認識.click(def (x):
             j.自覺.fadeOut(100)
             setTimeout(def f():
                 j.意思.fadeIn(200)
             ,100)
             self.選擇(int(x.currentTarget.id))
         )
-        $('#不認識').click(def (x):
+        j.不認識.click(def ():
             j.自覺.fadeOut(100)
             self.回收()
+        )
+        j.切.click(def ():
+            self.data.前切()
+            j.上板.fadeOut(200)
+            j.切數.html(len(self.data.切過的詞))
+            self.data.切詞存檔()
+        )        
+        j.選擇詞典.change(def ():
+            self.更換詞典($(this).children('option:selected').val())
         )
         
 a=演出()

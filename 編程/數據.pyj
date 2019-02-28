@@ -9,25 +9,24 @@ def 加权抽取(li,wei):
     p=random.uniform(0,total_weight)
     for i in range(len(li)):
         p-=wei[i]
-        if p<0: 
+        if p<0:
             return li[i]
             
 class set(Array):
     def add(self,x):
         self.push(x)
-        
+    def remove(self,dx):
+        for i in range(len(self)):
+            if self[i]==dx:
+                self=self[:i].concat(self[3:])
+                break
+                
 class Data():
-    def __init__(self):
-        #————————————————————————————
-        #读入单词表
-        self.單詞表=n1單詞
+    def __init__(self,單詞表):
+        self.單詞表=單詞表
         
-        #————————————————————————————
-        #读入例句字典
         self.例句字典=例句
         
-        #————————————————————————————
-        #打乱单词表
         R=配置.隨機種子
         x=0
         for i in self.單詞表:
@@ -40,6 +39,7 @@ class Data():
         #————————————————————————————
         #读入被切过的单词
         self.切過的詞={}
+        self.切詞同步()
         #————————————————————————————
         #生成缓冲区
         self.緩衝區=set()
@@ -50,6 +50,7 @@ class Data():
         #填充权
         for i in self.單詞表:
             i['权']=1
+            
             
 
     def 填滿緩衝區(self):
@@ -66,11 +67,14 @@ class Data():
         self.填滿緩衝區()
 
     def 切詞存檔(self):
-        print('當然不能存檔')
+        $.cookie('切詞', JSON.stringify(self.切過的詞), { expires: 9999999 });
        
     def 切詞同步(self):
-        print('當然不能同步')
-    
+        try:
+            self.切過的詞 = JSON.parse($.cookie('切詞'))
+        except:
+            print('同步失敗') 
+            
     def 处理例句(self,句):
         if type(句)=='String':
             pattern=re.compile(r'^.*?[^<]/')
@@ -126,20 +130,3 @@ class Data():
     
     def 切過了(self,x):
         return self.單詞表[x]['假名']+' '+self.單詞表[x]['寫法'] in self.切過的詞
-
-if __name__=='__main__':
-    data = Data()
-    print(data.單詞表[1])
-    for i in range(160):
-        q=data.生成問題()
-        if i%100==99:
-            print('已经处理',i,'个。')
-        
-        
-    # import numpy as np
-    # 权s=[data.單詞表[i]['权'] for i in list(data.緩衝區)]
-    # print('方差=%.3f' % np.array(权s).var())
-    # print('没读过数=%d'% sum([i==1 for i in 权s]))
-    
-    # import 圖表
-    # 圖表.draw(权s)

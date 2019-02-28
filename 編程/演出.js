@@ -441,7 +441,7 @@ var ՐՏ_modules = {};
 
 (function(){
     var __name__ = "數據";
-    var rd, data, i, q;
+    var rd;
     var random = ՐՏ_modules["random"];
     
     rd = random.randint;
@@ -465,13 +465,24 @@ var ՐՏ_modules = {};
             var self = this;
             self.push(x);
         }
+        remove (dx) {
+            var ՐՏ_1;
+            var self = this;
+            var i;
+            for (i = 0; i < len(self); i++) {
+                if (((ՐՏ_1 = self[i]) === dx || typeof ՐՏ_1 === "object" && ՐՏ_eq(ՐՏ_1, dx))) {
+                    self = self.slice(0, i).concat(self.slice(3));
+                    break;
+                }
+            }
+        }
     }
     class Data {
-        constructor () {
+        constructor (單詞表) {
             var ՐՏitr2, ՐՏidx2, ՐՏitr3, ՐՏidx3;
             var self = this;
             var R, x, i;
-            self.單詞表 = n1單詞;
+            self.單詞表 = 單詞表;
             self.例句字典 = 例句;
             R = 配置.隨機種子;
             x = 0;
@@ -487,6 +498,7 @@ var ՐՏ_modules = {};
             }
             self.單詞表.sort(_);
             self.切過的詞 = {};
+            self.切詞同步();
             self.緩衝區 = new set();
             self.緩衝區尾 = 0;
             self.填滿緩衝區();
@@ -515,11 +527,17 @@ var ՐՏ_modules = {};
         }
         切詞存檔 () {
             var self = this;
-            ՐՏ_print("當然不能存檔");
+            $.cookie("切詞", JSON.stringify(self.切過的詞), {
+                expires: 9999999
+            });
         }
         切詞同步 () {
             var self = this;
-            ՐՏ_print("當然不能同步");
+            try {
+                self.切過的詞 = JSON.parse($.cookie("切詞"));
+            } catch (ՐՏ_Exception) {
+                ՐՏ_print("同步失敗");
+            }
         }
         处理例句 (句) {
             var self = this;
@@ -542,7 +560,7 @@ var ՐՏ_modules = {};
             }
         }
         生成問題 () {
-            var ՐՏ_1, ՐՏ_2;
+            var ՐՏ_2, ՐՏ_3;
             var self = this;
             var 組, li, i, the_spell, 例句;
             組 = {};
@@ -564,7 +582,7 @@ var ՐՏ_modules = {};
                 if (len(self.緩衝區) === 1) {
                     break;
                 }
-                if (((ՐՏ_1 = self.當前詞位置) !== (ՐՏ_2 = self.之前詞位置) && (typeof ՐՏ_1 !== "object" || !ՐՏ_eq(ՐՏ_1, ՐՏ_2)))) {
+                if (((ՐՏ_2 = self.當前詞位置) !== (ՐՏ_3 = self.之前詞位置) && (typeof ՐՏ_2 !== "object" || !ՐՏ_eq(ՐՏ_2, ՐՏ_3)))) {
                     break;
                 }
             }
@@ -610,23 +628,7 @@ var ՐՏ_modules = {};
             return ՐՏ_in(self.單詞表[x]["假名"] + " " + self.單詞表[x]["寫法"], self.切過的詞);
         }
     }
-    if (__name__ === "__main__") {
-        data = new Data();
-        ՐՏ_print(data.單詞表[1]);
-        for (i = 0; i < 160; i++) {
-            q = data.生成問題();
-            if (i % 100 === 99) {
-                ՐՏ_print("已经处理", i, "个。");
-            }
-        }
-    }
     ՐՏ_modules["數據"]["rd"] = rd;
-
-    ՐՏ_modules["數據"]["data"] = data;
-
-    ՐՏ_modules["數據"]["i"] = i;
-
-    ՐՏ_modules["數據"]["q"] = q;
 
     ՐՏ_modules["數據"]["加权抽取"] = 加权抽取;
 
@@ -689,52 +691,73 @@ var ՐՏ_modules = {};
                 $("#" + i + " .選項").html(self.問題[i - 1].中文);
             }
             $("#" + self.正解位置 + " .選項").html(self.問題.正解.中文);
+            j.加載.hide(0);
             j.單詞.html(self.問題.正解.假名);
             ՐՏ_print(self);
         }
         選擇 (x) {
-            var ՐՏ_3;
+            var ՐՏ_4;
             var self = this;
-            if ((x === (ՐՏ_3 = self.正解位置) || typeof x === "object" && ՐՏ_eq(x, ՐՏ_3))) {
+            if ((x === (ՐՏ_4 = self.正解位置) || typeof x === "object" && ՐՏ_eq(x, ՐՏ_4))) {
                 self.回收();
             }
         }
-        加載 () {
+        加載 (單詞表) {
             var self = this;
-            self.data = new 數據.Data();
+            self.data = new 數據.Data(單詞表);
             self.出題();
+            j.切數.html(len(self.data.切過的詞));
             ՐՏ_print("加載好了");
+        }
+        更換詞典 (詞典名) {
+            var self = this;
+            $.getScript("./編程/數據/" + 詞典名 + "單詞.js", function f() {
+                ++self.t;
+                if (self.t > 1) {
+                    self.加載(eval(詞典名 + "單詞"));
+                }
+            });
         }
         初始化 (x) {
             var self = this;
+            var a;
             ՐՏ_print("初始化");
+            a = $.cookie("單詞表");
+            if (!a) {
+                a = "n3";
+            }
             $.getScript("./編程/數據/例句.js", function f() {
                 ++self.t;
-                if (self.t === 2) {
-                    self.加載();
+                if (self.t > 1) {
+                    self.加載(n3單詞);
                 }
             });
-            $.getScript("./編程/數據/n1單詞.js", function f() {
-                ++self.t;
-                if (self.t === 2) {
-                    self.加載();
-                }
-            });
+            self.更換詞典("n3");
+            j.單詞.hide(0);
             j.上板.hide(0);
             j.意思.hide(0);
             $("#意思 .選項按鈕").click(function(x) {
                 self.選擇(parseInt(x.currentTarget.id));
             });
-            $("#認識").click(function(x) {
+            j.認識.click(function(x) {
                 j.自覺.fadeOut(100);
                 setTimeout(function f() {
                     j.意思.fadeIn(200);
                 }, 100);
                 self.選擇(parseInt(x.currentTarget.id));
             });
-            $("#不認識").click(function(x) {
+            j.不認識.click(function() {
                 j.自覺.fadeOut(100);
                 self.回收();
+            });
+            j.切.click(function() {
+                self.data.前切();
+                j.上板.fadeOut(200);
+                j.切數.html(len(self.data.切過的詞));
+                self.data.切詞存檔();
+            });
+            j.選擇詞典.change(function() {
+                self.更換詞典($(this).children("option:selected").val());
             });
         }
     }

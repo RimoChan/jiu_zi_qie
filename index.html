@@ -1,9 +1,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdn.bootcss.com/remodal/1.1.1/remodal.js"></script>
+    <link href="https://cdn.bootcss.com/remodal/1.1.1/remodal.css" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/remodal/1.1.1/remodal-default-theme.min.css" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
     <link href="entireframework.min.css" rel="stylesheet"/>
     <link href="樣式.css" rel="stylesheet"/>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
     <script src='./編程/演出.js'></script>
     <link rel="shortcut icon" type="image/x-icon" href="九字切.ico"/>
     <title>
@@ -20,9 +24,9 @@
         </div>
     </div>
     <div class="右">
-        <span id="設置按鈕">
+        <a id="設置按鈕" data-remodal-target="設置" href="#設置">
             ⚚
-        </span>
+        </a>
         <div id="狀態">
             當前切數<br>
             <span id="切數">
@@ -106,5 +110,16 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="remodal 插入" data-remodal-id="設置">
+        <h1>
+            設定
+        </h1>
+        選擇詞典
+        <select id="選擇詞典">
+            <option>n3</option>
+            <option>n2</option>
+            <option>n1</option>
+        </select>
     </div>
 </body>
