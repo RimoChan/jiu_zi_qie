@@ -8,6 +8,10 @@ body{
     text-align:center;
     -webkit-user-select:none;
 }
+a{
+    text-decoration: none;
+    color: #000;
+}
 @keyframes 加載{
     from {transform: translateY(-2vw);}
     to {transform: translateY(2vw);}
@@ -16,6 +20,55 @@ body{
     animation: 加載 0.5s;
     animation-iteration-count: infinite;
     animation-direction:alternate;
+}
+.上{
+    position: absolute;
+    top: 1%;
+    left: 50%;
+    transform: translate(-50%,0);
+    opacity: 0.5;
+}
+
+.右{
+    text-align: right;
+    position: absolute;
+    right: 1%;
+}
+#狀態{
+    font-size:75%;
+}
+#設置按鈕{
+    display:inline-block;
+    font-size:180%;
+    opacity: 0.4;
+    font-family: 黑体;
+    transition: opacity 0.2s, transform 0.2s;
+}
+#設置按鈕:hover{
+    opacity: 0.8;
+    transform: scale(1.1);
+    transition: opacity 0.2s, transform 0.2s;
+}
+.左{
+    position:absolute;
+    left:1%;
+    top:1%;
+    text-align: left;
+
+    background:url('紙背景模糊.jpg');
+    background-attachment: fixed; 
+    background-size:cover;
+    box-shadow: 0px 0px 14px;
+    border:1px solid rgba(0,0,0,0.2);
+
+    padding: 1vw;
+    width: 14vw;
+    border-radius: 0.5vw;
+
+    font-size:75%;
+}
+#寫法{
+    font-size:150%;
 }
 .正中{
     font-size:350%;
@@ -30,6 +83,18 @@ body{
     position:absolute;
     bottom:0%;
 }
+#切{
+    border-top:1px solid #aaa;
+    padding-top:1vw;
+    text-align:center;
+    transition: font-size 0.2s,color 0.2s;
+}
+#切:hover{
+    color:#900;
+    font-size:140%;
+    transition: font-size 0.2s,color 0.2s;
+}
+
 .選項按鈕{
     height:100%;
     border:solid 1px #777;
@@ -56,7 +121,7 @@ body{
     height: 100%;
     margin: 0;
     padding: 0;
-    z-index: -1;
+    z-index: -10;
 }
 .水晶{
     border-radius: 2vw;

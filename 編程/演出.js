@@ -654,11 +654,21 @@ var ՐՏ_modules = {};
         constructor () {
             var self = this;
             self.正解位置 = null;
-            self.t = 0;
+            self.問題 = null;
             self.data = null;
+            self.t = 0;
         }
         回收 () {
             var self = this;
+            j.上板.fadeOut(200);
+            setTimeout(function f() {
+                j.中文.html(self.問題.正解.中文);
+                j.假名.html(self.問題.正解.假名);
+                j.寫法.html(self.問題.正解.寫法);
+                j.詞性.html(self.問題.正解.詞性);
+                j.例句.html(self.問題.例句);
+                j.上板.fadeIn();
+            }, 200);
             j.單詞.fadeOut(500);
             j.意思.fadeOut(500);
             setTimeout(function() {
@@ -667,20 +677,19 @@ var ՐՏ_modules = {};
         }
         出題 () {
             var self = this;
-            var a, i;
+            var i;
             j.自覺.fadeIn(300);
             j.單詞.fadeIn(500);
-            a = self.data.生成問題();
+            self.問題 = self.data.生成問題();
             self.正解位置 = random.randint(0, 3);
             for (i = 0; i < self.正解位置; i++) {
-                $("#" + i + " .選項").html(a[i].中文);
+                $("#" + i + " .選項").html(self.問題[i].中文);
             }
             for (i = self.正解位置 + 1; i < 4; i++) {
-                $("#" + i + " .選項").html(a[i - 1].中文);
+                $("#" + i + " .選項").html(self.問題[i - 1].中文);
             }
-            $("#" + self.正解位置 + " .選項").html(a.正解.中文);
-            j.單詞.html(a.正解.假名);
-            ՐՏ_print(a);
+            $("#" + self.正解位置 + " .選項").html(self.問題.正解.中文);
+            j.單詞.html(self.問題.正解.假名);
             ՐՏ_print(self);
         }
         選擇 (x) {
@@ -711,6 +720,7 @@ var ՐՏ_modules = {};
                     self.加載();
                 }
             });
+            j.上板.hide(0);
             j.意思.hide(0);
             $("#意思 .選項按鈕").click(function(x) {
                 self.選擇(parseInt(x.currentTarget.id));
@@ -721,6 +731,10 @@ var ՐՏ_modules = {};
                     j.意思.fadeIn(200);
                 }, 100);
                 self.選擇(parseInt(x.currentTarget.id));
+            });
+            $("#不認識").click(function(x) {
+                j.自覺.fadeOut(100);
+                self.回收();
             });
         }
     }

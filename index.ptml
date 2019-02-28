@@ -1,13 +1,53 @@
 head:
+
     meta http-equiv="Content-Type" content="text/html; charset=utf-8";
     link href="entireframework.min.css" rel="stylesheet";
     link href="樣式.css" rel="stylesheet";
     script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js":
+    link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"; 
 
     script src='./編程/演出.js':
 
+    link rel="shortcut icon" type="image/x-icon" href="九字切.ico"; 
+    title:
+        九字切
+
 body oncontextmenu='window.event.returnValue=false;':
     div#bg:
+    div.上: 
+        div#標題:
+            a href='https://github.com/RimoChan/jiu_zi_qie' target="_black":
+                <i class="fa fa-github" aria-hidden="true"></i> 九字切
+    div.右:
+        span#設置按鈕:
+            ⚚
+        div#狀態:
+            當前切數<br>
+            span#切數:
+                0
+    div#上板.左:
+        ruby:
+            span#寫法:
+                売り切れる
+            rt#假名:
+                うりきれる
+        div:
+            small:
+                【<span id='詞性'>自下一</span>】
+        p:
+            small:
+                解釋 
+            br;
+            span#中文: 
+                買光
+        p:
+            small:
+                例句
+            br;
+            span#例句: 
+                喵喵喵
+        div#切:
+            切
     div#單詞.正中:
         div#加載:
             數據加載中
