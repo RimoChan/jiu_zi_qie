@@ -7,9 +7,12 @@ j = new Proxy({},{'get': def f(target,name):
   return $('#'+name)
 })
 
+
 class 演出():
     def __init__(self):
         self.正解位置 = None
+        self.t=0
+        self.data = None
 
     def 回收(self):
         j.單詞.fadeOut(500)
@@ -22,7 +25,7 @@ class 演出():
         j.自覺.fadeIn(300)
         j.單詞.fadeIn(500)
         
-        a = 數據.data.生成問題()
+        a = self.data.生成問題()
         
         self.正解位置 = random.randint(0,3)
         
@@ -40,10 +43,26 @@ class 演出():
     def 選擇(self,x):
         if x == self.正解位置:
             self.回收()
-    
-    def 初始化(self,x):
-        j.意思.hide(0)
+            
+    def 加載(self):
+        self.data = 數據.Data()
         self.出題()
+        print('加載好了')
+        
+    def 初始化(self,x):
+        print('初始化')
+        $.getScript("./編程/數據/例句.js", def f():
+            self.t+=1
+            if self.t==2:
+                self.加載()
+        )
+        $.getScript("./編程/數據/n1單詞.js", def f():
+            self.t+=1
+            if self.t==2:
+                self.加載()
+        )
+        
+        j.意思.hide(0)
         $('#意思 .選項按鈕').click(def (x):
             self.選擇(int(x.currentTarget.id))
         )

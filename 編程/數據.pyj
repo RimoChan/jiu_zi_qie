@@ -127,8 +127,6 @@ class Data():
     def 切過了(self,x):
         return self.單詞表[x]['假名']+' '+self.單詞表[x]['寫法'] in self.切過的詞
 
-data=Data()
-
 if __name__=='__main__':
     data = Data()
     print(data.單詞表[1])

@@ -610,7 +610,6 @@ var ՐՏ_modules = {};
             return ՐՏ_in(self.單詞表[x]["假名"] + " " + self.單詞表[x]["寫法"], self.切過的詞);
         }
     }
-    data = new Data();
     if (__name__ === "__main__") {
         data = new Data();
         ՐՏ_print(data.單詞表[1]);
@@ -655,6 +654,8 @@ var ՐՏ_modules = {};
         constructor () {
             var self = this;
             self.正解位置 = null;
+            self.t = 0;
+            self.data = null;
         }
         回收 () {
             var self = this;
@@ -669,7 +670,7 @@ var ՐՏ_modules = {};
             var a, i;
             j.自覺.fadeIn(300);
             j.單詞.fadeIn(500);
-            a = 數據.data.生成問題();
+            a = self.data.生成問題();
             self.正解位置 = random.randint(0, 3);
             for (i = 0; i < self.正解位置; i++) {
                 $("#" + i + " .選項").html(a[i].中文);
@@ -689,10 +690,28 @@ var ՐՏ_modules = {};
                 self.回收();
             }
         }
+        加載 () {
+            var self = this;
+            self.data = new 數據.Data();
+            self.出題();
+            ՐՏ_print("加載好了");
+        }
         初始化 (x) {
             var self = this;
+            ՐՏ_print("初始化");
+            $.getScript("./編程/數據/例句.js", function f() {
+                ++self.t;
+                if (self.t === 2) {
+                    self.加載();
+                }
+            });
+            $.getScript("./編程/數據/n1單詞.js", function f() {
+                ++self.t;
+                if (self.t === 2) {
+                    self.加載();
+                }
+            });
             j.意思.hide(0);
-            self.出題();
             $("#意思 .選項按鈕").click(function(x) {
                 self.選擇(parseInt(x.currentTarget.id));
             });

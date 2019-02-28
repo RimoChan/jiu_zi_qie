@@ -8,6 +8,15 @@ body{
     text-align:center;
     -webkit-user-select:none;
 }
+@keyframes 加載{
+    from {transform: translateY(-2vw);}
+    to {transform: translateY(2vw);}
+}
+#加載{
+    animation: 加載 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction:alternate;
+}
 .正中{
     font-size:350%;
     position:absolute;

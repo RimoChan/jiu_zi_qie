@@ -4,15 +4,13 @@ head:
     link href="樣式.css" rel="stylesheet";
     script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js":
 
-    script src='./編程/數據/n1單詞.js':
-    script src='./編程/數據/例句.js':
-
     script src='./編程/演出.js':
 
 body oncontextmenu='window.event.returnValue=false;':
     div#bg:
     div#單詞.正中:
-        〇〇〇
+        div#加載:
+            數據加載中
     div.底:
         div#自覺.row:
             div#認識.選項按鈕.水晶.col.c6:
