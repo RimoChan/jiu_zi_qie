@@ -1,3 +1,0 @@
-print(type(' ')=='String')
-
-# print(isinstance('',))
